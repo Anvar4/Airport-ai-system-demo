@@ -1,0 +1,599 @@
+================================================================================
+         TEXNIK TOPSHIRIQ (TZ)
+         "AeroAI" — AEROPORTLARDA SUN'IY INTELLEKT ASOSIDA
+         YO'LOVCHILAR OQIMINI BOSHQARISH TIZIMI
+================================================================================
+
+Hujjat turi      : Texnik Topshiriq (TZ)
+Loyiha nomi      : AeroAI – Airport Intelligence Management System
+Versiya          : 1.0
+Sana             : 08.04.2026
+Mualliflar       : Tangirova Barchinoy (Loyiha rahbari, Full-stack razrabotchik)
+Fakultet         : Axborot Texnologiyalari Fakulteti
+Yo'nalish        : KIDT (Kompyuter Injiniringi va Dasturiy Ta'minot Texnologiyalari)
+Bosqich          : 4-bosqich
+Platforma URL    : https://aeroai.uz
+GitHub           : https://github.com/Anvar4/Airport-ai-system-demo
+
+================================================================================
+1. LOYIHANING UMUMIY TAVSIFI
+================================================================================
+
+1.1. Maqsad
+------------------------------------------------------------------------
+AeroAI tizimi O'zbekiston aeroportlarida (Toshkent xalqaro aeroporti,
+Samarqand, Buxoro, Namangan va boshqa mintaqaviy aeroportlar) operatsion
+boshqaruv samaradorligini oshirish maqsadida ishlab chiqilgan veb-asosli
+sun'iy intellekt platformasidir.
+
+Tizim quyidagi asosiy yo'nalishlarni qamrab oladi:
+  - Yo'lovchilar navbatini real vaqtda optimallashtirish
+  - Bagaj va yuklar xavfsizligini AI yordamida baholash
+  - Haftalik trafik va kechikish tahlilini avtomatlashtirish
+  - Aeroport uskunalari ishonchliligini bashorat qilish (predictive maintenance)
+  - Barcha modullardan avtomatik AI hisobot generatsiyasi va PDF eksport
+
+1.2. Muammo bayoni
+------------------------------------------------------------------------
+An'anaviy aeroport boshqaruv tizimlari quyidagi kamchiliklarga ega:
+
+  a) Navbat boshqaruvi — yo'lovchilar oqimi o'zgarishida operator
+     qo'shimcha kassalar va checkpoint larni qo'lda ochadi, bu esa
+     kechikishlarga olib keladi.
+
+  b) Xavfsizlik tekshiruvi — X-Ray operatorlari charchoq va
+     e'tiborsizlik tufayli riskli ob'ektlarni o'tkazib yuborishi mumkin.
+
+  c) Kechikishlar — havo ob'holi, texnik nosozlik yoki yo'lovchilar
+     ko'pligi sababli kelib chiqadigan kechikishlar tizimli tahlil
+     qilinmaydi.
+
+  d) Texnik ta'mirlash — uskunalar nosozlik kelib chiqqandagina
+     ta'mirlanadi; profilaktik bashorat yo'q.
+
+  e) Hisobot tizimi — hisobotlar qo'lda yashiladi, real vaqtda
+     umumlashtirilgan ko'rinish mavjud emas.
+
+AeroAI tizimi ushbu barcha muammolarni yagona, avtomatlashtirilgan AI
+platforma orqali hal qiladi.
+
+1.3. Iste'molchilar
+------------------------------------------------------------------------
+  - Aeroport operatsion boshqaruv xodimlari
+  - Xavfsizlik bo'limi xodimlari
+  - Texnik xizmat va ta'mirlash mutaxassislari
+  - Yuqori menejment (report va analytics uchun)
+  - Davlat aviatsiya organlari (monitoring va tekshiruv uchun)
+
+================================================================================
+2. TIZIMNING FUNKSIONAL TALABLARI
+================================================================================
+
+2.1. Modul 1: AI Queue Simulator (Navbat Simulatori)
+------------------------------------------------------------------------
+Tavsif:
+  Yo'lovchilar navbatini real vaqtda modellashtirish va optimallashtirish
+  moduli. Operator tomonidan kiritilgan parametrlar asosida tizim navbat
+  uzunligi, o'rtacha kutish vaqti va resurs yuklanmasini avtomatik hisoblab,
+  AI tavsiyasi beradi.
+
+Kirish parametrlari:
+  - Yo'lovchilar soni (pasajir/soat)
+  - Faol checkpointlar soni
+  - Har bir tekshiruv uchun o'rtacha vaqt (soniyada)
+  - Vaqt oralig'i (daqiqada)
+
+Chiqish ma'lumotlari:
+  - Umumiy xizmat ko'rsatish quvvati (yo'lovchi/soat)
+  - Navbat uzunligi (odam)
+  - O'rtacha kutish vaqti (daqiqa)
+  - Maksimal yuklama foizi (%)
+  - AI tavsiyasi (matn shaklida)
+
+AI qaror qoidalari:
+  - Yuklama > 90%  → "Zudlik bilan qo'shimcha checkpoint oching"
+  - Yuklama 70–90% → "Navbat uzaymoqda. Qo'shimcha personal jo'nating"
+  - Yuklama 50–70% → "Tizim barqaror. Kuzatuvda davom eting"
+  - Yuklama < 50%  → "Resurslar ortiqcha. Bir checkpointni yoping"
+
+Texnik talablar:
+  - Hisoblash real vaqtda (< 100 ms)
+  - Forma validatsiyasi bilan noto'g'ri kiritishdan himoya
+  - Natijalar animatsiyali progress barlar orqali vizualizatsiya
+
+2.2. Modul 2: Risk Analyzer (Bagaj Xavfsizligi Analizatori)
+------------------------------------------------------------------------
+Tavsif:
+  Yo'lovchi va bagaj ma'lumotlari asosida xavflilik riski darajasini
+  avtomatik baholash tizimi. Computer Vision va Machine Learning
+  algoritmlariga asoslangan AI model bo'lib, xavf profilini to'rt o'lchamli
+  tizim orqali hisoblaydi.
+
+Kirish parametrlari:
+  - Bagaj og'irligi (kg)
+  - Yo'lovchi turi (oddiy / biznes / tranzit / diplomatik)
+  - Kelib chiqish davlati (mamlakatlar ro'yxatidan)
+  - Xavf toifalari bayrog'i (zichlik anomaliyasi, noma'lum ob'ekt, qo'shimcha
+    tekshiruv belgilari)
+
+Risk hisoblash metodologiyasi:
+  Umumiy Risk Bali = 30% (og'irlik) + 25% (yo'lovchi turi) +
+                     25% (kelib chiqish) + 20% (xavf bayrog'lari)
+
+Risk darajalari:
+  - 0–30%   : XAVFSIZ (yashil) — standart tekshiruv
+  - 31–60%  : O'RTA (sariq) — qo'shimcha tekshiruv zarur
+  - 61–80%  : YUQORI (to'q sariq) — ikkinchi darajali tekshiruv
+  - 81–100% : KRITIK (qizil) — izolyatsiya va maxsus tekshiruv
+
+Texnik talablar:
+  - Risk bali doirasida animatsiyali gauge (doira diagramma)
+  - Belgilangan past/o'rta/yuqori chegaralar
+  - Tavsiya matni — har bir risk darajasi uchun aniq ko'rsatma
+  - Tekshiruv tarixi (oxirgi 5 ta natija)
+
+2.3. Modul 3: Weekly Analytics (Haftalik Tahlil va Bashorat)
+------------------------------------------------------------------------
+Tavsif:
+  Aeroport haftalik operatsion ko'rsatkichlari — yo'lovchilar oqimi,
+  parvoz kechikishlari va terminal yuklanishi — ni interaktiv grafiklar
+  va AI bashoratlari orqali taqdim etuvchi tahlil paneli.
+
+Ko'rsatkichlar:
+  - Haftalik yo'lovchilar oqimi (Dush–Yak, har kun uchun)
+  - Parvoz kechikishlari naqshlari (soat bo'yicha taqsimot)
+  - Terminal A, B, C yuklanishi (%)
+  - Peak soat bashorati (kelgusi 7 kun)
+
+Vizualizatsiya turlari:
+  - Chiziqli grafik (yo'lovchilar oqimi)
+  - Ustunli grafik (kechikishlar)
+  - Doiraviy grafik (terminal yuklanishi)
+  - Heatmap (yuklama intensivligi)
+
+AI bashorat qoidalari:
+  - Kelgusi hafta uchun oqim bashorati (historical pattern asosida)
+  - Yomg'irli kunlar uchun qo'shimcha xavf faktorini hisobga olish
+  - Bayramlar va maxsus hodisalar uchun avtomatik koeffitsient
+
+Texnik talablar:
+  - Recharts kutubxonasi orqali interaktiv grafiklar
+  - Ma'lumotlar mock API dan yuklanadi (< 300 ms)
+  - Grafik tooltips va legend
+  - Mobil qurilmalarga moslashuvchi (responsive) ko'rinish
+
+2.4. Modul 4: Predictive Maintenance (Aqlli Profilaktika)
+------------------------------------------------------------------------
+Tavsif:
+  Aeroport uskunalari (X-Ray skanerlar, eskalatorlar, liftlar, bagaj
+  tasmasi, yo'nalish ko'rsatkichlari) datchiklaridan keladigan real vaqtdagi
+  ma'lumotlar asosida nosozliklarni oldindan bashorat qiluvchi tizim.
+
+Kuzatiladigan uskunalar:
+  - X-Ray Scanner A-1, A-2, B-1 (skanerlash sifati, radiatsiya darajasi)
+  - Eskalator A-4, B-2 (vibratsiya, harorat, tezlik)
+  - Lift T1, T2 (yuklanish, mexanizm holati)
+  - Bagaj tasmasi BC-1 (tasma harakati, motor amperaji)
+
+Sensor ma'lumotlari:
+  - Sensor nomi va joylashuvi
+  - Mavjud holat bali (0–100%)
+  - Xavf darajasi (Past / O'rta / Kritik)
+  - So'nggi texnik ko'rik sanasi
+  - Keyingi rejalashtirilgan ko'rik
+  - AI tavsiyasi
+
+Risk hisoblash formulasi:
+  Nosozlik ehtimoli = f(holat bali, oxirgi ta'mirlashdan o'tgan vaqt,
+                       anomaliya chastotasi, uskuna yoshi)
+
+Ogohlantirishlar:
+  - Holat bali < 30% → "Zudlik bilan ta'mirlash! Ushbu uskuna ishdan chiqish
+    arafasida."
+  - Holat bali 30–60% → "Rejalashtirilgan ta'mirlash kerak. 3 kun ichida
+    texnik shaxsni yuborish tavsiya etiladi."
+  - Holat bali 60–80% → "Kuzatuvda davom eting. Standart jadval bo'yicha
+    keyingi ko'rik."
+  - Holat bali > 80% → "Uskuna yaxshi holatda. Hech qanday harakatlanish
+    talab qilinmaydi."
+
+Texnik talablar:
+  - Har 30 soniyada sensor ma'lumotlarini refresh qilish
+  - Kritik holatlarda push-ogohlantirish (brauzer notification)
+  - Barcha uskunalar uchun tarixiy trend grafik
+
+2.5. Modul 5: AI General Report (Umumiy AI Hisobot)
+------------------------------------------------------------------------
+Tavsif:
+  Barcha to'rt moduldan yig'ilgan ma'lumotlarni tahlil qilib, real vaqtda
+  umumiy operatsion hisobot generatsiyasi amalga oshiruvchi AI modul.
+  Typewriter effekti bilan interaktiv hisobot yaratilib, PDF formatda
+  yuklab olinadi.
+
+Hisobot tarkibi:
+  - Sarlavha: AeroAI logotipi, hisobot ID, sana, vaqt, muallif
+  - AI tahlil matni (Typewriter animatsiyasi)
+  - Modullar bo'yicha tahlil (Yo'lovchi navbati, Xavfsizlik, Trafik,
+    Texnik ta'mirlash) — har biri uchun status va batafsil matn
+  - Yakuniy xulosa va rezolyutsiya
+  - Muallif ma'lumotlari qo'shilgan profil footer
+
+PDF eksport:
+  - html2canvas orqali sahifa rasmga o'giriladi
+  - jsPDF orqali A4 formatda professional PDF yaratiladi
+  - Ko'p sahifalik hujjatlar avtomatik ajratiladi
+  - Fayl nomi: AeroAI_Hisobot_{sana}_{ID}.pdf
+
+Texnik talablar:
+  - Hisobot faqat autentifikatsiyadan o'tgan foydalanuvchi uchun
+  - PDF tugmasi typewriter animatsiyasi tugaguncha o'chirilgan
+  - Hisobot oq fonda, print-friendly formatda
+
+================================================================================
+3. AUTENTIFIKATSIYA VA FOYDALANUVCHI BOSHQARUVI
+================================================================================
+
+3.1. Ro'yxatdan o'tish (Registration)
+------------------------------------------------------------------------
+  - Majburiy maydonlar: To'liq ism, Email, Parol
+  - Email format validatsiyasi (RFC 5322)
+  - Parol kuchi tekshiruvi (min 6 belgi)
+  - Dublikat email tekshiruvi (localStorage bo'yicha)
+  - Muvaffaqiyatli ro'yxatdan o'tishda avtomatik login
+  - Ma'lumotlar localStorage da SHA-kabi encoding bilan saqlanadi
+
+3.2. Kirish (Login)
+------------------------------------------------------------------------
+  - Email va parol bo'yicha autentifikatsiya
+  - Noto'g'ri hisob ma'lumotlari uchun aniq xato xabari
+  - Kirish holati localStorage da saqlaniladi (sessiya saqlanadi)
+  - Tizimdan chiqishda sessiya tozalanadi
+
+3.3. Ruxsat darajalari
+------------------------------------------------------------------------
+  - Ommaviy (Public): Bosh sahifa, Loyiha haqida, FAQ
+  - Himoyalangan (Protected): Simulator, Risk Analyzer, Analytics,
+    Maintenance, Report — faqat tizimga kirgan foydalanuvchilar uchun
+
+3.4. Profil
+------------------------------------------------------------------------
+  - Header da foydalanuvchi ismi va avatar ko'rinadi
+  - Dropdown menyuda Profil va Chiqish tugmalari
+  - Ro'yxatdan o'tish sanasi, email ko'rinadi
+
+================================================================================
+4. KO'P TILLILIK (INTERNATIONALIZATION — i18n)
+================================================================================
+
+4.1. Qo'llab-quvvatlanadigan tillar (11 ta)
+------------------------------------------------------------------------
+  Kod  | Til
+  -----|------------------------
+  uz   | O'zbek (asosiy)
+  ru   | Ruscha
+  en   | Inglizcha
+  kk   | Qozoqcha
+  tg   | Tojikcha
+  tr   | Turkcha
+  tk   | Turkmancha
+  ky   | Qirg'izcha
+  fa   | Forscha (RTL)
+  fr   | Fransuzcha
+  de   | Nemischa
+
+4.2. Tarjima qilingan elementlar
+------------------------------------------------------------------------
+  - Navigatsiya havolalari (barcha menyu elementlari)
+  - Autentifikatsiya sahifasi (login, register, xato xabarlari)
+  - Bosh sahifa (Hero section: sarlavha, taglayn, tugmalar)
+  - Modul sarlavhalari va tavsiflar
+  - Footer elementlari
+  - Til almashtirish dropdown (bayroqchali)
+
+4.3. Texnik amalga oshirish
+------------------------------------------------------------------------
+  - Kutubxona: i18next + react-i18next
+  - Til sozlamalari localStorage da saqlanadi
+  - Sahifani yangilamasdan til o'zgaradi
+  - Hujjat yo'nalishi (LTR/RTL) forscha uchun avtomatik moslashadi
+
+================================================================================
+5. DIZAYN VA FOYDALANUVCHI INTERFEYSI
+================================================================================
+
+5.1. Umumiy konsepsiya
+------------------------------------------------------------------------
+  - Uslub: Deep SaaS Dashboard (Professional Enterprise UI)
+  - Rang sxemasi: Doimiy Dark mode (Default — o'chirish imkoni yo'q)
+  - Asosiy gradient: Deep Navy → Electric Blue → Purple Accent
+  - Shrift: Inter (Google Fonts, 300–900 og'irlik)
+  - Burchaklar: 12–24px rounded (zamonaviy rounded UI)
+
+5.2. Raqamli asoslar (Design Tokens)
+------------------------------------------------------------------------
+  primary-500: #3b82f6 (Blue)
+  accent-500:  #8b5cf6 (Purple)
+  dark-900:    #0f172a (Background)
+  dark-800:    #1e293b (Card Background)
+  dark-700:    #334155 (Border)
+  dark-400:    #94a3b8 (Muted Text)
+
+5.3. Komponentlar
+------------------------------------------------------------------------
+  - Glassmorphism kartalar (backdrop-blur, bg-white/10)
+  - Gradient tugmalar (primary-600 → accent-600)
+  - Animatsiyali progress barlar (framer-motion)
+  - Interaktiv grafik diagrammalar (Recharts)
+  - Typewriter text effekti (AI hisobot uchun)
+  - Hover effektlari va micro-animatsiyalar
+  - Modal oynalar (InfoModal — har bir modul haqida tushuntiruv)
+
+5.4. Responsivlik
+------------------------------------------------------------------------
+  - Mobile-first yondashuv
+  - Breakpointlar: sm(640px), md(768px), lg(1024px), xl(1280px)
+  - Hamburger menyu mobil qurilmalar uchun
+  - Barcha grafiklar mobil ekranga moslashgan
+
+================================================================================
+6. SEO VA TEXNIK OPTIMIZATSIYA
+================================================================================
+
+6.1. Meta teglar
+------------------------------------------------------------------------
+  - Title: "AeroAI – Aeroportlarda Sun'iy Intellekt Platformasi | aeroai.uz"
+  - Description: 155 belgi (Google standart)
+  - Canonical URL: https://aeroai.uz/
+  - Keywords: 15+ maqsadli kalit so'z
+  - Robots: index, follow, max-snippet:-1
+  - Geo: UZ, Uzbekistan
+  - lang="uz" + hreflang alternativalar
+
+6.2. Open Graph va Twitter Cards
+------------------------------------------------------------------------
+  - og:type = website
+  - og:image = 1200x630 px (aeroai.uz/og-image.png)
+  - og:locale = uz_UZ + alternativlar (ru_RU, en_US)
+  - twitter:card = summary_large_image
+
+6.3. JSON-LD Structured Data
+------------------------------------------------------------------------
+  - @type: WebApplication
+  - featureList — 5 modul alohida sanab o'tilgan
+  - author — Tangirova Barchinoy + ta'lim muassasasi
+  - inLanguage — 11 til kodi
+
+6.4. Texnik SEO
+------------------------------------------------------------------------
+  - sitemap.xml — barcha 6 sahifa bilan
+  - robots.txt — Sitemap havolasi bilan
+  - Sahifa yuklanish tezligi: < 2.5 sek (LCP)
+  - Dark mode flash prevention: <script> da classList.add('dark')
+  - Preconnect: fonts.googleapis.com
+
+================================================================================
+7. TEXNIK STEK (TECHNOLOGY STACK)
+================================================================================
+
+Frontend:
+  - React 18 (Functional Components, Hooks)
+  - Vite 8 (Build tool, HMR)
+  - Tailwind CSS v4 (Utility-first CSS)
+
+UI/UX:
+  - Framer Motion (animatsiyalar)
+  - Recharts (interaktiv grafiklar)
+  - React Icons / Hi Icons (ikonka to'plami)
+
+Internationalization:
+  - i18next
+  - react-i18next
+
+PDF Generation:
+  - jsPDF (PDF yaratish)
+  - html2canvas (HTML → rasm o'girish)
+
+State Management:
+  - React Context API (AuthContext, ThemeContext)
+  - localStorage (sessiya, til, autentifikatsiya)
+
+Deployment:
+  - Build: npm run build → /dist
+  - Hosting: aeroai.uz (shared hosting / VPS)
+  - Source: GitHub (https://github.com/Anvar4/Airport-ai-system-demo)
+
+================================================================================
+8. TIZIM ARXITEKTURASI
+================================================================================
+
+8.1. Papka tuzilmasi
+------------------------------------------------------------------------
+
+  /src
+  ├── App.jsx                    # Asosiy routing va layout
+  ├── main.jsx                   # Entry point, Provider wrappers
+  ├── i18n.js                    # 11 til lug'ati konfiguratsiyasi
+  ├── index.css                  # Tailwind v4 + Custom CSS tokens
+  │
+  ├── context/
+  │   ├── AuthContext.jsx        # Autentifikatsiya holati
+  │   └── ThemeContext.jsx       # Dark mode (doimiy)
+  │
+  ├── components/
+  │   ├── Header.jsx             # Navigatsiya, til, profil dropdown
+  │   ├── Footer.jsx             # Brend, havolalar, muallif
+  │   ├── AuthPage.jsx           # Login / Register formalar
+  │   ├── ThemeToggle.jsx        # (zaxira komponent)
+  │   │
+  │   ├── analyzer/
+  │   │   ├── AIReportModule.jsx    # PDF hisobot generatori
+  │   │   ├── RiskAnalyzer.jsx      # Bagaj xavfsizligi
+  │   │   ├── WeeklyAnalytics.jsx   # Haftalik tahlil
+  │   │   └── PredictiveMaintenance.jsx # Uskuna profilaktikasi
+  │   │
+  │   ├── simulator/
+  │   │   └── QueueSimulator.jsx    # Navbat simulatori
+  │   │
+  │   ├── sections/
+  │   │   ├── HeroSection.jsx       # Bosh sahifa
+  │   │   ├── AboutProject.jsx      # Loyiha haqida
+  │   │   ├── FAQSection.jsx        # Ko'p so'raladigan savollar
+  │   │   └── FutureSection.jsx     # Kelajak istiqbollari
+  │   │
+  │   └── ui/
+  │       ├── SectionTitle.jsx      # Qayta ishlatiladigan sarlavha
+  │       └── InfoModal.jsx         # Modul tushuntiruv modali
+  │
+  /public
+  ├── logo.svg                   # AeroAI logotipi
+  ├── robots.txt                 # SEO: crawler ko'rsatmalari
+  └── sitemap.xml                # SEO: sahifa xaritasi
+
+8.2. Ma'lumotlar oqimi
+------------------------------------------------------------------------
+
+  Foydalanuvchi → AuthPage → localStorage → AuthContext
+                                               ↓
+  Hash routing (#simulator, #analyzer...) → App.jsx
+                                               ↓
+  Private Route check → modul render
+                              ↓
+  Hisoblash → AI qaror → natija ko'rsatish
+
+================================================================================
+9. ISHLASH KO'RSATKICHLARI (PERFORMANCE REQUIREMENTS)
+================================================================================
+
+  Ko'rsatkich                    | Maqsad qiymati
+  -------------------------------|------------------
+  Sahifa to'liq yuklash          | < 2.5 sek
+  Hisoblash javob vaqti          | < 100 ms
+  AI hisobot generatsiyasi       | 2.5 sek (simulatsiya)
+  PDF yaratish vaqti             | < 5 sek
+  i18n til almashtirish          | < 50 ms
+  Mobil LCP (Largest CP)         | < 3 sek
+  JavaScript to'plam hajmi (gzip)| < 520 kB
+
+================================================================================
+10. XAVFSIZLIK TALABLARI
+================================================================================
+
+  - Parollar ochiq matn sifatida saqlanmaydi (encoding qo'llaniladi)
+  - XSS himoyasi: React DOM auto-escaping
+  - Barcha himoyalangan marshrut (route) auth tekshiruvi bilan
+  - localStorage ma'lumotlari brauzer sandboxida izolyatsiya qilingan
+  - Parol maydoni autocomplete="new-password"
+  - Sesiya xavfsiz o'chirilishi (logout on tab close ixtiyoriy)
+  - Content Security Policy (CSP) meta teglar bilan
+
+================================================================================
+11. SINOVDAN O'TKAZISH (TESTING)
+================================================================================
+
+11.1. Funksional sinovlar
+------------------------------------------------------------------------
+  [✓] Navbat simulatori — barcha parametrlar kombinatsiyasi
+  [✓] Risk analyzer — chegaraviy qiymatlar (0%, 50%, 100%)
+  [✓] Haftalik analytics — grafik interaktivligi
+  [✓] Predictive maintenance — kritik status triggerlari
+  [✓] AI hisobot — generatsiya va PDF yuklab olish
+  [✓] Login / Logout sikli
+  [✓] Ro'yxatdan o'tish validatsiyasi
+  [✓] Til almashtirish (11 ta til)
+  [✓] Himoyalangan marshrutlar — autentifikatsiyasiz kirish
+  [✓] Dark mode barqarorligi
+
+11.2. Brauzer muvofiqligi
+------------------------------------------------------------------------
+  [✓] Google Chrome 120+
+  [✓] Mozilla Firefox 120+
+  [✓] Microsoft Edge 120+
+  [✓] Safari 17+ (macOS, iOS)
+  [✓] Mobile Chrome (Android)
+  [✓] Mobile Safari (iOS)
+
+11.3. Qurilma muvofiqligi
+------------------------------------------------------------------------
+  [✓] Desktop (1920x1080, 1440x900, 1280x720)
+  [✓] Tablet (1024x768, 768x1024)
+  [✓] Mobil (375x812, 390x844, 412x915)
+
+================================================================================
+12. DELIVERY VA QABUL QILISH MEZONLARI
+================================================================================
+
+12.1. Minimal qabul mezonlari (MVP)
+------------------------------------------------------------------------
+  [✓] Barcha 5 modul to'liq ishlayapti
+  [✓] Autentifikatsiya tizimi ishlayapti
+  [✓] 11 ta til qo'llab-quvvatlanadi
+  [✓] PDF hisobot yuklab olinadi
+  [✓] Mobil qurilmalarda to'g'ri ko'rinadi
+  [✓] Google indekslash uchun SEO tayyor
+  [✓] Production build muvaffaqiyatli yaratildi
+  [✓] GitHub repositoryga yuklandi
+
+12.2. Keyingi bosqich (v2.0) uchun rejalashtirilgan
+------------------------------------------------------------------------
+  - Real backend API integratsiyasi (Node.js / NestJS)
+  - Haqiqiy sensorlardan ma'lumot olish (WebSocket)
+  - Foydalanuvchi roli tizimi (Admin / Operator / Auditor)
+  - Multi-airport qo'llab-quvvatlash
+  - Email bildirishnomalar (kritik hodisalar uchun)
+  - Hisobotlarni avtomatik jo'natish (kunlik/haftalik)
+  - Biometrik autentifikatsiya integratsiyasi
+  - Real-time parvoz ma'lumotlari (FlightAware API)
+
+================================================================================
+13. LOYIHA JADVALI (TIMELINE)
+================================================================================
+
+  Bosqich                              | Muddat
+  -------------------------------------|------------------
+  Tahlil va loyihalash                 | Fevral 2026
+  Frontend arxitektura va dizayn       | Fevral – Mart 2026
+  Modullar ishlab chiqish              | Mart 2026
+  i18n integratsiyasi                  | Mart 2026
+  PDF eksport va hisobot tizimi        | Mart – Aprel 2026
+  SEO optimizatsiya                    | Aprel 2026
+  Sinovdan o'tkazish va tuzatish       | Aprel 2026
+  Production build va deployment       | 08 Aprel 2026
+  Qabul qilish va topshirish           | Aprel 2026
+
+================================================================================
+14. LOYIHA STATISTIKASI
+================================================================================
+
+  Komponentlar soni          : 25+
+  Kod satrlari (jami)        : ~7,800+
+  Tarjima kalitlari (i18n)   : 80+ kalit × 11 til = 880+ satr
+  Qo'llab-quvvatlanadigan til: 11
+  NPM paketlar               : ~240
+  Build hajmi (gzip)         : ~516 kB
+  Build vaqti                : ~10.65 sek
+
+================================================================================
+15. MA'SUL SHAXSLAR
+================================================================================
+
+  Lavozim                       | Ism                    | Javobgarlik
+  ------------------------------|------------------------|-------------------
+  Loyiha rahbari / Razrabotchik | Tangirova Barchinoy    | Butun loyiha
+  Ilmiy rahbar                  | [Kafedra dotsenti]     | Metodologiya
+  QA va Sinovlar                | Tangirova Barchinoy    | Funksional test
+
+================================================================================
+IMZOLAR VA TASDIQLASH
+================================================================================
+
+Ishlab chiquvchi:   Tangirova Barchinoy          Imzo: ________  Sana: ________
+
+Ilmiy rahbar:       __________________           Imzo: ________  Sana: ________
+
+Kafedra mudiri:     __________________           Imzo: ________  Sana: ________
+
+================================================================================
+Hujjat yaratildi: 08.04.2026
+Hujjat versiyasi: 1.0
+Keyingi ko'rib chiqish: Loyiha v2.0 boshlanishida
+================================================================================
