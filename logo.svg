@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <defs>
+    <linearGradient id="logoGrad" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <linearGradient id="planeGrad" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#e0f2fe"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background rounded square -->
+  <rect width="48" height="48" rx="12" fill="url(#logoGrad)"/>
+
+  <!-- Runway/grid lines (AI circuit feel) -->
+  <line x1="8" y1="38" x2="40" y2="38" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-linecap="round"/>
+  <line x1="14" y1="38" x2="14" y2="34" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-linecap="round"/>
+  <line x1="24" y1="38" x2="24" y2="32" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-linecap="round"/>
+  <line x1="34" y1="38" x2="34" y2="34" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-linecap="round"/>
+
+  <!-- Airplane shape — pointing top-right -->
+  <g transform="translate(24, 22) rotate(-35)">
+    <!-- Main body -->
+    <ellipse cx="0" cy="0" rx="2.2" ry="8" fill="url(#planeGrad)"/>
+    <!-- Wings -->
+    <path d="M-1,-1 L-9,5 L-1,4 Z" fill="white" opacity="0.9"/>
+    <path d="M1,-1 L9,5 L1,4 Z" fill="white" opacity="0.9"/>
+    <!-- Tail -->
+    <path d="M-0.8,6 L-4,9 L-0.8,7.5 Z" fill="white" opacity="0.7"/>
+    <path d="M0.8,6 L4,9 L0.8,7.5 Z" fill="white" opacity="0.7"/>
+  </g>
+
+  <!-- Neural dot nodes (AI theme) -->
+  <circle cx="10" cy="12" r="1.5" fill="rgba(255,255,255,0.6)"/>
+  <circle cx="38" cy="12" r="1.5" fill="rgba(255,255,255,0.6)"/>
+  <circle cx="10" cy="12" r="1.5" fill="rgba(255,255,255,0.6)"/>
+  <circle cx="8" cy="20" r="1" fill="rgba(255,255,255,0.35)"/>
+  <circle cx="40" cy="20" r="1" fill="rgba(255,255,255,0.35)"/>
+
+  <!-- Connecting neural lines -->
+  <line x1="10" y1="12" x2="8" y2="20" stroke="rgba(255,255,255,0.25)" stroke-width="0.8"/>
+  <line x1="38" y1="12" x2="40" y2="20" stroke="rgba(255,255,255,0.25)" stroke-width="0.8"/>
+</svg>
