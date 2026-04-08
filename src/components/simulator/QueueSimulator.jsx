@@ -1,26 +1,30 @@
-import { useState, useMemo } from 'react';
-import { motion } from 'framer-motion';
+import { useMemo, useState } from 'react';
+import { HiCheckCircle, HiCog, HiExclamation, HiInformationCircle, HiShieldExclamation } from 'react-icons/hi';
 import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
+  CartesianGrid,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis, YAxis
 } from 'recharts';
-import { HiCog, HiCheckCircle, HiExclamation, HiShieldExclamation, HiInformationCircle } from 'react-icons/hi';
 import InfoModal from '../ui/InfoModal';
 
 export default function QueueSimulator() {
   const [passengers, setPassengers] = useState(500);
   const [checkpoints, setCheckpoints] = useState(5);
-  const [processTime, setProcessTime] = useState(45); 
-  const [timeRange, setTimeRange] = useState(60); 
-  
+  const [processTime, setProcessTime] = useState(45);
+  const [timeRange, setTimeRange] = useState(60);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const stats = useMemo(() => {
     const capacityPerCheckpoint = (timeRange * 60) / processTime;
     const totalCapacity = Math.floor(capacityPerCheckpoint * checkpoints);
-    
+
     const queueLength = Math.max(0, passengers - totalCapacity);
     const utilization = Math.min(100, (passengers / totalCapacity) * 100);
-    
+
     let waitTime = 0;
     if (queueLength > 0) {
       waitTime = (queueLength * processTime) / (60 * checkpoints);
@@ -49,18 +53,18 @@ export default function QueueSimulator() {
   }, [passengers, processTime, timeRange]);
 
   const severity = stats.waitTime > 30 ? 'red' : stats.waitTime > 10 ? 'amber' : 'green';
-  const recommendation = stats.waitTime > 30 
+  const recommendation = stats.waitTime > 30
     ? "Kritik holat! O'rtacha kutish vaqti juda yuqori. Zudlik bilan qo'shimcha " + Math.ceil(chartData.find(d => d.waitTime <= 15)?.checkpoints - checkpoints + 1 || 5) + " ta nazorat punkti (checkpoint) ochish kerak."
     : stats.waitTime > 10
-    ? "O'rtacha holat. Navbatlar yig'ila boshlagan, " + (Math.ceil(chartData.find(d => d.waitTime <= 5)?.checkpoints - checkpoints) > 0 ? Math.ceil(chartData.find(d => d.waitTime <= 5)?.checkpoints - checkpoints) + " ta qo'shimcha punkt " : "biroz ko'proq resurslar ") + "vaziyatni yaxshilaydi."
-    : stats.utilization < 40 
-    ? "Diqqat: Resurslar haddan tashqari ko'p sarflanmoqda (utilizatsiya " + stats.utilization + "%). Xarajatlarni kamaytirish uchun " + Math.max(1, checkpoints - Math.floor(chartData.find(d => d.waitTime <= 5)?.checkpoints || 0)) + " ta punkti yopish mumkin."
-    : "Optimal holat. Yo'lovchilar oqimi va xizmat ko'rsatish tezligi mukammal muvozanatda.";
+      ? "O'rtacha holat. Navbatlar yig'ila boshlagan, " + (Math.ceil(chartData.find(d => d.waitTime <= 5)?.checkpoints - checkpoints) > 0 ? Math.ceil(chartData.find(d => d.waitTime <= 5)?.checkpoints - checkpoints) + " ta qo'shimcha punkt " : "biroz ko'proq resurslar ") + "vaziyatni yaxshilaydi."
+      : stats.utilization < 40
+        ? "Diqqat: Resurslar haddan tashqari ko'p sarflanmoqda (utilizatsiya " + stats.utilization + "%). Xarajatlarni kamaytirish uchun " + Math.max(1, checkpoints - Math.floor(chartData.find(d => d.waitTime <= 5)?.checkpoints || 0)) + " ta punkti yopish mumkin."
+        : "Optimal holat. Yo'lovchilar oqimi va xizmat ko'rsatish tezligi mukammal muvozanatda.";
 
   return (
     <div className="space-y-6">
       <div className="flex justify-end mb-4">
-        <button 
+        <button
           onClick={() => setIsModalOpen(true)}
           className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-dark-800 border border-dark-200 dark:border-dark-700 rounded-xl shadow-sm hover:shadow-md transition-all text-primary-600 dark:text-primary-400 font-semibold text-sm"
         >
@@ -75,7 +79,7 @@ export default function QueueSimulator() {
           <h3 className="text-xl font-extrabold mb-8 text-dark-800 dark:text-white flex items-center gap-2">
             <HiCog className="text-primary-500 animate-spin-slow" /> Simulyatsiya Parametrlari
           </h3>
-          
+
           <div className="space-y-8">
             <div className="group">
               <div className="flex justify-between mb-3">
@@ -121,7 +125,7 @@ export default function QueueSimulator() {
               <span className="text-4xl font-black text-blue-600 dark:text-blue-500">{stats.totalCapacity}</span>
               <span className="text-xs font-medium text-dark-400 mt-2">yo'lovchi qabul qila oladi</span>
             </div>
-            
+
             <div className="bg-white dark:bg-dark-800 p-6 rounded-3xl border border-dark-100 dark:border-dark-700 shadow-xl shadow-dark-200/50 dark:shadow-black/20 flex flex-col justify-center relative overflow-hidden">
               <div className={`absolute -right-4 -top-4 w-16 h-16 rounded-full blur-xl ${stats.queueLength > 0 ? 'bg-amber-500/10' : 'bg-green-500/10'}`} />
               <span className="text-sm font-semibold text-dark-500 dark:text-dark-400 mb-2">Qolgan navbat uzunligi</span>
@@ -130,14 +134,14 @@ export default function QueueSimulator() {
             </div>
 
             <div className={`p-6 rounded-3xl border shadow-xl flex flex-col justify-center relative overflow-hidden transition-colors duration-300 ${severity === 'red' ? 'bg-red-50 dark:bg-red-500/5 border-red-200 dark:border-red-500/20 shadow-red-500/10' : severity === 'amber' ? 'bg-amber-50 dark:bg-amber-500/5 border-amber-200 dark:border-amber-500/20 shadow-amber-500/10' : 'bg-green-50 dark:bg-green-500/5 border-green-200 dark:border-green-500/20 shadow-green-500/10'}`}>
-               <div className={`absolute -right-4 -top-4 w-16 h-16 rounded-full blur-xl ${severity === 'red' ? 'bg-red-500/20' : severity === 'amber' ? 'bg-amber-500/20' : 'bg-green-500/20'}`} />
+              <div className={`absolute -right-4 -top-4 w-16 h-16 rounded-full blur-xl ${severity === 'red' ? 'bg-red-500/20' : severity === 'amber' ? 'bg-amber-500/20' : 'bg-green-500/20'}`} />
               <span className="text-sm font-semibold text-dark-600 dark:text-dark-300 mb-2">O'rtacha kutish vaqti</span>
               <span className={`text-4xl font-black ${severity === 'red' ? 'text-red-600 dark:text-red-500' : severity === 'amber' ? 'text-amber-600 dark:text-amber-500' : 'text-green-600 dark:text-green-500'}`}>{stats.waitTime} <span className="text-lg font-bold">daq</span></span>
               <span className="text-xs font-medium mt-2 opacity-70">har bir yo'lovchi uchun</span>
             </div>
           </div>
 
-          <div className={`p-6 rounded-3xl border shadow-lg flex items-start gap-4 transition-colors duration-300 ${severity === 'red' ? 'bg-gradient-to-r from-red-50 to-white dark:from-red-500/10 dark:to-dark-800 border-red-200 dark:border-red-500/20 text-red-700 dark:text-red-400 shadow-red-500/5' : severity === 'amber' ? 'bg-gradient-to-r from-amber-50 to-white dark:from-amber-500/10 dark:to-dark-800 border-amber-200 dark:border-amber-500/20 text-amber-700 dark:text-amber-400 shadow-amber-500/5' : 'bg-gradient-to-r from-green-50 to-white dark:from-green-500/10 dark:to-dark-800 border-green-200 dark:border-green-500/20 text-green-700 dark:text-green-400 shadow-green-500/5'}`}>
+          <div className={`p-6 rounded-3xl border shadow-lg flex items-start gap-4 transition-colors duration-300 ${severity === 'red' ? 'bg-linear-to-r from-red-50 to-white dark:from-red-500/10 dark:to-dark-800 border-red-200 dark:border-red-500/20 text-red-700 dark:text-red-400 shadow-red-500/5' : severity === 'amber' ? 'bg-linear-to-r from-amber-50 to-white dark:from-amber-500/10 dark:to-dark-800 border-amber-200 dark:border-amber-500/20 text-amber-700 dark:text-amber-400 shadow-amber-500/5' : 'bg-linear-to-r from-green-50 to-white dark:from-green-500/10 dark:to-dark-800 border-green-200 dark:border-green-500/20 text-green-700 dark:text-green-400 shadow-green-500/5'}`}>
             <span className="text-3xl mt-1">{severity === 'red' ? <HiShieldExclamation /> : severity === 'amber' ? <HiExclamation /> : <HiCheckCircle />}</span>
             <div>
               <h4 className="font-extrabold mb-2 text-lg">Harakat Boyicha AI Tavsiyasi (Resurslarni optimallashtirish)</h4>
@@ -151,20 +155,20 @@ export default function QueueSimulator() {
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" opacity={0.1} vertical={false} />
-                  <XAxis dataKey="checkpoints" tick={{fontSize: 12}} axisLine={false} tickLine={false} />
-                  <YAxis tick={{fontSize: 12}} axisLine={false} tickLine={false} />
-                  <Tooltip 
+                  <XAxis dataKey="checkpoints" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} />
+                  <YAxis tick={{ fontSize: 12 }} axisLine={false} tickLine={false} />
+                  <Tooltip
                     contentStyle={{ borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)' }}
                     itemStyle={{ fontWeight: 'bold' }}
                   />
-                  <Line 
-                    type="natural" 
-                    dataKey="waitTime" 
+                  <Line
+                    type="natural"
+                    dataKey="waitTime"
                     name="Kutish vaqti (daq)"
-                    stroke="#3b82f6" 
-                    strokeWidth={4} 
-                    dot={{r: 5, fill: '#3b82f6', strokeWidth: 2, stroke: '#fff'}} 
-                    activeDot={{r: 8, strokeWidth: 0, shadow: '0 0 10px rgba(59,130,246,0.5)'}} 
+                    stroke="#3b82f6"
+                    strokeWidth={4}
+                    dot={{ r: 5, fill: '#3b82f6', strokeWidth: 2, stroke: '#fff' }}
+                    activeDot={{ r: 8, strokeWidth: 0, shadow: '0 0 10px rgba(59,130,246,0.5)' }}
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -173,7 +177,7 @@ export default function QueueSimulator() {
         </div>
       </div>
 
-      <InfoModal 
+      <InfoModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         title="Q-Simulator (Navbat boshqaruvi)"

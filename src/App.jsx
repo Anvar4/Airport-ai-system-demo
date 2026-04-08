@@ -30,10 +30,16 @@ function App() {
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
+  useEffect(() => {
+    if (user && activeTab === 'auth') {
+      window.location.hash = 'home';
+    }
+  }, [user, activeTab]);
+
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{background:'#0f172a'}}>
-        <div className="w-16 h-16 border-4 rounded-full animate-spin" style={{borderColor:'rgba(59,130,246,0.3)', borderTopColor:'#3b82f6'}} />
+      <div className="min-h-screen flex items-center justify-center" style={{ background: '#0f172a' }}>
+        <div className="w-16 h-16 border-4 rounded-full animate-spin" style={{ borderColor: 'rgba(59,130,246,0.3)', borderTopColor: '#3b82f6' }} />
       </div>
     );
   }
@@ -54,7 +60,7 @@ function App() {
   );
 
   return (
-    <div className="min-h-screen flex flex-col transition-colors duration-300" style={{background: 'var(--bg)'}}>
+    <div className="min-h-screen flex flex-col transition-colors duration-300" style={{ background: 'var(--bg)' }}>
       <Header activeTab={activeTab} />
       <main className="flex-1 mt-16 sm:mt-20">
 
